@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Encargar tareas completas: reportes, cotizaciones y documentos</title>
+<style>
+
+    @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;900&display=swap');
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Montserrat', sans-serif; background: #f0f2f5; color: #333; }
+    .slide { width: 100%; max-width: 1024px; margin: 20px auto; background: #fff; border-radius: 20px; box-shadow: 0 8px 30px rgba(0,0,0,0.12); overflow: hidden; min-height: 500px; display: flex; flex-direction: column; }
+    .slide-header { background: #3d5a96; padding: 18px 30px; display: flex; align-items: center; justify-content: space-between; }
+    .slide-header h2 { color: #fff; font-size: 20px; font-weight: 700; }
+    .slide-header .num { color: rgba(255,255,255,0.6); font-size: 14px; }
+    .slide-body { padding: 30px; flex: 1; }
+    .slide-footer { background: #2e4575; padding: 10px 30px; display: flex; justify-content: space-between; color: rgba(255,255,255,0.7); font-size: 12px; }
+    .portada { min-height: 90vh; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; position: relative; overflow: hidden; }
+    .portada-bg { position: absolute; inset: 0; background: linear-gradient(135deg, #3d5a96 0%, #e8755c 50%, #d05a7e 100%); z-index: 0; }
+    .portada .franja1 { position: absolute; bottom: 0; left: 0; right: 0; height: 12px; background: #e8755c; z-index: 1; }
+    .portada .franja2 { position: absolute; top: 0; right: 0; width: 25%; height: 8%; background: #d05a7e; z-index: 1; }
+    .portada .franja3 { position: absolute; bottom: 0; left: 0; width: 10%; height: 18%; background: #d05a7e; z-index: 1; }
+    .portada .franja4 { position: absolute; bottom: 0; right: 0; width: 15%; height: 12%; background: #e8755c; z-index: 1; }
+    .portada-content { position: relative; z-index: 2; padding: 40px; }
+    .portada .campus { color: rgba(255,255,255,0.7); font-size: 13px; letter-spacing: 4px; font-weight: 700; margin-bottom: 40px; }
+    .portada h1 { color: #fff; font-size: 48px; font-weight: 900; line-height: 1.2; margin-bottom: 8px; text-shadow: 3px 3px 12px rgba(0,0,0,0.2); }
+    .portada h1 span { display: block; font-size: 32px; font-weight: 600; }
+    .portada .tema-label { color: rgba(255,255,255,0.85); font-size: 18px; margin-top: 50px; }
+    .portada .tema { color: #fff; font-size: 28px; font-weight: 700; margin-top: 8px; }
+    .portada .instituto { color: rgba(255,255,255,0.75); font-size: 15px; margin-top: 50px; }
+    .portada .fecha { color: rgba(255,255,255,0.55); font-size: 13px; margin-top: 10px; }
+    h3 { color: #3d5a96; font-size: 22px; margin-bottom: 20px; }
+    h4 { color: #3d5a96; font-size: 18px; margin-bottom: 12px; }
+    .block { background: #fdf4f0; border-left: 5px solid #e8755c; padding: 18px 20px; border-radius: 0 10px 10px 0; margin: 15px 0; }
+    .block-title { font-weight: 700; color: #e8755c; margin-bottom: 6px; }
+    .block-blue { background: #eff2f8; border-left: 5px solid #3d5a96; }
+    .block-blue .block-title { color: #3d5a96; }
+    .block-pink { background: #fdf0f4; border-left: 5px solid #d05a7e; }
+    .block-pink .block-title { color: #d05a7e; }
+    .block-vino { background: #fdf0f2; border-left: 5px solid #691b31; }
+    .block-vino .block-title { color: #691b31; }
+    ul, ol { padding-left: 22px; line-height: 2; }
+    li { margin-bottom: 4px; }
+    .columns { display: flex; gap: 30px; }
+    .columns > div { flex: 1; }
+    table { width: 100%; border-collapse: collapse; margin: 15px 0; }
+    th, td { border: 1px solid #ddd; padding: 10px 14px; text-align: left; }
+    th { background: #3d5a96; color: #fff; }
+    tr:nth-child(even) { background: #f8f9fc; }
+    .tag { display: inline-block; background: #3d5a96; color: #fff; padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 600; margin-right: 6px; }
+    .center { text-align: center; }
+    .final { display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 400px; text-align: center; }
+    .final h2 { color: #3d5a96; font-size: 32px; margin-bottom: 20px; }
+    .final p { color: #666; font-size: 18px; }
+    .nav-bar { max-width: 1024px; margin: 10px auto; display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; }
+    .nav-bar button { background: #3d5a96; color: #fff; border: none; padding: 8px 16px; border-radius: 8px; cursor: pointer; font-family: 'Montserrat', sans-serif; font-weight: 600; font-size: 13px; transition: all 0.2s; }
+    .nav-bar button:hover { background: #e8755c; transform: translateY(-2px); }
+    .nav-bar button.activo { background: #d05a7e; }
+    .nav-controls { max-width: 1024px; margin: 10px auto; display: flex; gap: 10px; justify-content: center; }
+    .nav-controls button { background: #3d5a96; color: #fff; border: none; padding: 10px 28px; border-radius: 25px; cursor: pointer; font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 15px; transition: all 0.2s; }
+    .nav-controls button:hover { background: #e8755c; transform: scale(1.05); }
+    .counter { max-width: 1024px; margin: 5px auto; text-align: center; font-size: 13px; color: #888; }
+    @media (max-width: 768px) {
+        .portada h1 { font-size: 32px; }
+        .portada h1 span { font-size: 24px; }
+        .portada .tema { font-size: 20px; }
+        .columns { flex-direction: column; }
+        .slide-body { padding: 20px; }
+        .slide-header h2 { font-size: 16px; }
+    }
+
+</style>
+</head>
+<body>
+
+<div class="nav-controls">
+    <button onclick="ant()">&#9664; Anterior</button>
+    <button onclick="sig()">Siguiente &#9654;</button>
+</div>
+<div class="counter" id="counter"></div>
+
+<div id="slides-container"></div>
+
+<script>
+const PORTADA = {
+    "etiqueta": "Tema 2.3 — Unidad 2",
+    "tema": "Encargar tareas completas:<br>reportes, cotizaciones y<br>documentos",
+    "instituto": "Instituto de Capacitación para el Trabajo del Estado de Hidalgo"
+};
+const slides = [
+    {
+        "tipo": "portada"
+    },
+    {
+        "titulo": "Índice",
+        "num": "2 / 32",
+        "body": "<div class=\"columns\"><div><strong style=\"color:#3d5a96;\">1. El encargo</strong><br>- Tarea completa<br>- Anatomía<br>- Por etapas<br><br><strong style=\"color:#3d5a96;\">2. Excel</strong><br>- Reportes<br>- Estructura<br>- Revisión<br><br><strong style=\"color:#3d5a96;\">3. Word y PDF</strong><br>- Cotizaciones<br>- Plantillas<br>- Resúmenes</div><div><strong style=\"color:#3d5a96;\">4. Más entregables</strong><br>- Presentaciones<br>- Tareas programadas<br><br><strong style=\"color:#3d5a96;\">5. Practicar</strong><br>- Ejemplo completo<br>- Errores<br>- Actividad<br><br><strong style=\"color:#3d5a96;\">6. Cerrar</strong><br>- Resumen y autoevaluación</div></div>"
+    },
+    {
+        "titulo": "Objetivo de aprendizaje",
+        "num": "3 / 32",
+        "body": "<p style=\"font-size:17px;line-height:1.7;margin-bottom:12px;\">Al terminar podrás <strong>encargar reportes en Excel, cotizaciones en Word y resúmenes en PDF</strong>, y revisar que el resultado sea correcto.</p><div class=\"block\"><div class=\"block-title\">Lo que sabrás hacer</div><ul style=\"font-size:16px;line-height:2.1;\"><li>Distinguir una pregunta de un encargo.</li><li>Escribir encargos con seis elementos.</li><li>Pedir reportes, cotizaciones y resúmenes con formato.</li><li>Revisar cifras, fórmulas y condiciones antes de entregar.</li></ul></div>"
+    },
+    {
+        "titulo": "Qué es una tarea completa",
+        "num": "4 / 32",
+        "body": "<p style=\"font-size:17px;line-height:1.7;margin-bottom:12px;\">Una tarea completa tiene un <strong>resultado verificable</strong>: un archivo, con un formato y un criterio de aceptación.</p><div class=\"columns\"><div><div class=\"block block-pink\"><div class=\"block-title\">Pregunta</div><ul style=\"font-size:16px;line-height:2.1;\"><li>«¿Cuánto vendí?»</li><li>Respuesta en el chat.</li><li>No queda archivo.</li></ul></div></div><div><div class=\"block block-blue\"><div class=\"block-title\">Encargo</div><ul style=\"font-size:16px;line-height:2.1;\"><li>«Haz el reporte de ventas de marzo en Excel».</li><li>Archivo entregable.</li><li>Se puede revisar.</li></ul></div></div></div>"
+    },
+    {
+        "titulo": "Anatomía del encargo",
+        "num": "5 / 32",
+        "body": "<table style=\"font-size:14px;\"><tr><th>Elemento</th><th>Pregunta</th><th>Ejemplo</th></tr><tr><td>Objetivo</td><td>¿Qué lograr?</td><td>Reporte mensual</td></tr><tr><td>Fuentes</td><td>¿Qué archivos?</td><td>01_Ventas de marzo</td></tr><tr><td>Formato</td><td>¿Cómo?</td><td>Excel con cuatro hojas</td></tr><tr><td>Criterios</td><td>¿Qué incluir?</td><td>Totales, comparación y conclusiones</td></tr><tr><td>Condiciones</td><td>¿Qué hacer si falta?</td><td>Marcar pendiente</td></tr><tr><td>Entrega</td><td>¿Dónde y con qué nombre?</td><td>06_Reportes/reporte_marzo.xlsx</td></tr></table>"
+    },
+    {
+        "titulo": "Reportes en Excel",
+        "num": "6 / 32",
+        "body": "<p style=\"font-size:17px;line-height:1.7;margin-bottom:12px;\">El reporte es el entregable más común. Define primero <strong>qué decisión tomarás</strong> con él.</p><ul style=\"font-size:16px;line-height:2.1;\"><li>Ventas por producto para saber qué impulsar.</li><li>Ventas por día para planear personal.</li><li>Gastos por categoría para controlar utilidad.</li><li>Comparación con el mes anterior para ver tendencia.</li><li>Conclusiones para conversar con socios.</li></ul>"
+    },
+    {
+        "titulo": "Estructura del reporte",
+        "num": "7 / 32",
+        "body": "<table style=\"font-size:14px;\"><tr><th>Hoja</th><th>Contenido</th><th>Para qué</th></tr><tr><td>Resumen</td><td>Ventas totales, ticket promedio, operaciones</td><td>Ver el mes de un vistazo</td></tr><tr><td>Por producto</td><td>Cantidad, importe, participación, margen</td><td>Decidir qué impulsar</td></tr><tr><td>Por día</td><td>Tendencia y días fuertes</td><td>Planear compras y personal</td></tr><tr><td>Gastos</td><td>Categorías y comparación</td><td>Controlar la utilidad</td></tr><tr><td>Conclusiones</td><td>Tres a cinco hallazgos</td><td>Apoyar la conversación</td></tr></table>"
+    },
+    {
+        "titulo": "Ejemplo de encargo de reporte",
+        "num": "8 / 32",
+        "body": "<div class=\"block block-vino\"><div class=\"block-title\">Instrucción</div>«En 01_Ventas está corte_marzo.xlsx. Genera un reporte en Excel con cuatro hojas: Resumen, Por producto, Por día y Gastos. Compara con febrero. Usa fórmulas para que los totales se recalculen. Agrega una gráfica de barras por producto y una de línea por día. Cierra con tres conclusiones. No incluyas nombres de clientes. Guarda como reporte_marzo.xlsx en 06_Reportes».</div><p style=\"font-size:15px;line-height:1.7;margin-bottom:12px;\">Observa: fuentes, formato, criterios, condición de privacidad y entrega.</p>"
+    },
+    {
+        "titulo": "Revisar un reporte",
+        "num": "9 / 32",
+        "body": "<ol style=\"font-size:16px;line-height:2.1;\"><li>Compara los totales con tu corte.</li><li>Cambia un valor de prueba y mira si recalcula.</li><li>Revisa que las conclusiones se sostengan.</li><li>Busca celdas vacías o errores de fórmula.</li><li>Verifica nombres, fechas y unidades.</li></ol><div class=\"block block-pink\"><div class=\"block-title\">Regla</div>Si una fórmula no se actualiza al cambiar un dato, el reporte es solo una foto, no una herramienta.</div>"
+    },
+    {
+        "titulo": "Cotizaciones en Word",
+        "num": "10 / 32",
+        "body": "<p style=\"font-size:17px;line-height:1.7;margin-bottom:12px;\">Una cotización profesional transmite confianza. El agente llena tu plantilla y calcula totales.</p><ul style=\"font-size:16px;line-height:2.1;\"><li>Usa una plantilla con logotipo y datos fiscales.</li><li>Define los campos: cliente, conceptos, cantidades y precios.</li><li>Calcula subtotal, IVA y total.</li><li>Incluye vigencia y condiciones.</li><li>Exporta a PDF para enviar.</li></ul>"
+    },
+    {
+        "titulo": "Plantilla y campos",
+        "num": "11 / 32",
+        "body": "<table><tr><th>Campo</th><th>Contenido</th></tr><tr><td>Encabezado</td><td>Logotipo, nombre, teléfono y correo</td></tr><tr><td>Cliente</td><td>Nombre o razón social</td></tr><tr><td>Conceptos</td><td>Descripción, cantidad, precio unitario</td></tr><tr><td>Totales</td><td>Subtotal, IVA, total</td></tr><tr><td>Condiciones</td><td>Vigencia, anticipo, entrega</td></tr><tr><td>Pie</td><td>Datos fiscales y firma</td></tr></table>"
+    },
+    {
+        "titulo": "Ejemplo de encargo de cotización",
+        "num": "12 / 32",
+        "body": "<div class=\"block block-vino\"><div class=\"block-title\">Instrucción</div>«Con la plantilla cotizacion.docx y la lista de precios, prepara una cotización para el cliente de pedido_045.txt. Calcula subtotal, IVA al 16% y total. Vigencia de 15 días. No inventes condiciones: usa las de la plantilla. Guarda el PDF como cotizacion_045_cliente.pdf».</div><div class=\"block block-blue\"><div class=\"block-title\">Revisa</div>Precios, cantidades, nombre del cliente, condiciones y fecha de vigencia.</div>"
+    },
+    {
+        "titulo": "Exportar a PDF",
+        "num": "13 / 32",
+        "body": "<ul style=\"font-size:16px;line-height:2.1;\"><li>Pide el PDF una vez validado el Word.</li><li>Revisa que no se corten tablas ni firmas.</li><li>Comprueba que el logotipo se vea bien.</li><li>Nombra el archivo con cliente y fecha.</li><li>Guarda el Word editable y el PDF final.</li></ul><div class=\"block block-blue\"><div class=\"block-title\">Ventaja del PDF</div>Se ve igual en cualquier dispositivo y no se edita por accidente.</div>"
+    },
+    {
+        "titulo": "Resúmenes ejecutivos",
+        "num": "14 / 32",
+        "body": "<p style=\"font-size:17px;line-height:1.7;margin-bottom:12px;\">Un resumen ejecutivo condensa lo importante para alguien que no tiene tiempo de leer todo.</p><ul style=\"font-size:16px;line-height:2.1;\"><li>Contexto en dos líneas.</li><li>Tres hallazgos principales.</li><li>Un cuadro con cifras clave.</li><li>Una recomendación concreta.</li><li>Una o dos páginas como máximo.</li></ul>"
+    },
+    {
+        "titulo": "Estructura del resumen",
+        "num": "15 / 32",
+        "body": "<table style=\"font-size:14px;\"><tr><th>Sección</th><th>Extensión</th><th>Contenido</th></tr><tr><td>Contexto</td><td>2 líneas</td><td>Qué se analizó y por qué</td></tr><tr><td>Hallazgos</td><td>3 puntos</td><td>Lo más relevante</td></tr><tr><td>Cifras</td><td>Una tabla</td><td>Ventas, gastos, utilidad</td></tr><tr><td>Recomendación</td><td>1 párrafo</td><td>Qué hacer y por qué</td></tr><tr><td>Anexo</td><td>Opcional</td><td>Detalle para quien quiera profundizar</td></tr></table>"
+    },
+    {
+        "titulo": "Ejemplo de encargo de resumen",
+        "num": "16 / 32",
+        "body": "<div class=\"block block-vino\"><div class=\"block-title\">Instrucción</div>«Con el reporte de marzo y las notas de la junta, prepara un resumen ejecutivo de una página en PDF para mi socio. Incluye cómo cerró el mes, los tres hallazgos más importantes, una tabla con ventas, gastos y utilidad, y una recomendación para abril. Tono formal, sin tecnicismos, con el logotipo de 05_Marca».</div><div class=\"block block-pink\"><div class=\"block-title\">Cuidado</div>Si se comparte fuera, anonimiza nombres y datos de clientes.</div>"
+    },
+    {
+        "titulo": "Presentaciones y otros entregables",
+        "num": "17 / 32",
+        "body": "<table style=\"font-size:14px;\"><tr><th>Entregable</th><th>Ejemplo de encargo</th></tr><tr><td>Presentación</td><td>«Con estas notas, arma 8 diapositivas para el equipo»</td></tr><tr><td>Reporte de gastos</td><td>«Clasifica los tickets por categoría»</td></tr><tr><td>Carpeta ordenada</td><td>«Organiza descargas por tipo y fecha»</td></tr><tr><td>Comparativo</td><td>«Compara tres proveedores en un cuadro»</td></tr><tr><td>Acta de reunión</td><td>«Extrae acuerdos, responsables y fechas»</td></tr></table>"
+    },
+    {
+        "titulo": "Encargos por etapas",
+        "num": "18 / 32",
+        "body": "<p style=\"font-size:17px;line-height:1.7;margin-bottom:12px;\">Para trabajos grandes, no pidas todo de una vez.</p><ol style=\"font-size:16px;line-height:2.1;\"><li>Pide el reporte del mes y revisa el formato.</li><li>Ajusta lo que no te guste.</li><li>Pide el resto de los meses con el mismo molde.</li><li>Cierra con el resumen ejecutivo.</li></ol><div class=\"block block-blue\"><div class=\"block-title\">Beneficio</div>Detectas errores de formato antes de invertir tiempo en todo el trabajo.</div>"
+    },
+    {
+        "titulo": "Revisar avances",
+        "num": "19 / 32",
+        "body": "<ul style=\"font-size:16px;line-height:2.1;\"><li>Pide un borrador de una página antes del entregable completo.</li><li>Revisa que la estructura sea la correcta.</li><li>Corrige el rumbo antes de que avance más.</li><li>Usa mensajes cortos y específicos.</li></ul><div class=\"block block-pink\"><div class=\"block-title\">Señal de alerta</div>Si el agente entrega algo muy distinto a lo pedido, el encargo era ambiguo.</div>"
+    },
+    {
+        "titulo": "Pedir ajustes",
+        "num": "20 / 32",
+        "body": "<p style=\"font-size:17px;line-height:1.7;margin-bottom:12px;\">Sé específico: qué parte, qué debe cambiar y cómo se verá el resultado correcto.</p><div class=\"columns\"><div><div class=\"block block-pink\"><div class=\"block-title\">No ayuda</div><ul style=\"font-size:16px;line-height:2.1;\"><li>«Hazlo mejor».</li><li>«Está mal».</li><li>«Otra vez».</li></ul></div></div><div><div class=\"block block-blue\"><div class=\"block-title\">Sí ayuda</div><ul style=\"font-size:16px;line-height:2.1;\"><li>«En Resumen, ordena de mayor a menor».</li><li>«Cambia la gráfica a pastel».</li><li>«Agrega el IVA al total».</li></ul></div></div></div>"
+    },
+    {
+        "titulo": "Tareas programadas",
+        "num": "21 / 32",
+        "body": "<p style=\"font-size:17px;line-height:1.7;margin-bottom:12px;\">Los entregables que se repiten cada mes pueden ejecutarse solos.</p><ul style=\"font-size:16px;line-height:2.1;\"><li>Escribe /schedule en una tarea.</li><li>Define frecuencia y día.</li><li>Corren en la nube, sin tu equipo encendido.</li><li>El resultado queda para tu revisión.</li><li>Revisa la primera ejecución con cuidado.</li></ul>"
+    },
+    {
+        "titulo": "Ejemplo programado",
+        "num": "22 / 32",
+        "body": "<div class=\"block block-vino\"><div class=\"block-title\">Instrucción</div>«Cada lunes a las 8:00, revisa 01_Ventas, arma el corte de la semana anterior y déjalo en 06_Reportes con la fecha en el nombre. Si falta el archivo, avísame en lugar de inventar datos».</div><p style=\"font-size:15px;line-height:1.7;margin-bottom:12px;\">Una tarea programada bien escrita ahorra una hora cada semana.</p>"
+    },
+    {
+        "titulo": "Ejemplo completo",
+        "num": "23 / 32",
+        "body": "<ol style=\"font-size:16px;line-height:2.1;\"><li><strong>Reporte:</strong> Excel con cuatro hojas y conclusiones.</li><li><strong>Gastos:</strong> tabla por categoría y tickets ilegibles.</li><li><strong>Cotización:</strong> Word con plantilla y PDF.</li><li><strong>Resumen:</strong> una página para el socio sin datos de clientes.</li><li><strong>Revisión:</strong> totales, fórmulas, nombres y condiciones.</li></ol><div class=\"block block-blue\"><div class=\"block-title\">Resultado</div>Cuatro entregables verificables en una tarde, no en tres días.</div>"
+    },
+    {
+        "titulo": "Errores comunes",
+        "num": "24 / 32",
+        "body": "<table style=\"font-size:14px;\"><tr><th>Error</th><th>Causa</th><th>Solución</th></tr><tr><td>Cifras que no cuadran</td><td>Duplicados o celdas vacías</td><td>Pedir revisión previa</td></tr><tr><td>Formato distinto</td><td>No indicar plantilla</td><td>Adjuntar la plantilla</td></tr><tr><td>Datos inventados</td><td>Faltaba un archivo</td><td>Marcar pendiente y preguntar</td></tr><tr><td>Condiciones inventadas</td><td>No están en la plantilla</td><td>Escribirlas o prohibirlas</td></tr><tr><td>Archivo muy largo</td><td>Sin límite de extensión</td><td>Pedir páginas o secciones</td></tr></table>"
+    },
+    {
+        "titulo": "Seguridad y datos",
+        "num": "25 / 32",
+        "body": "<div class=\"block block-vino\"><div class=\"block-title\">Antes de encargar</div>Define qué información no debe aparecer: nombres, teléfonos, direcciones, datos de pago.</div><ul style=\"font-size:16px;line-height:2.1;\"><li>Usa datos de ejemplo para las pruebas.</li><li>Anonimiza cuando el entregable sale del negocio.</li><li>No pegues contraseñas en la instrucción.</li><li>Revisa el archivo antes de enviarlo.</li></ul>"
+    },
+    {
+        "titulo": "Actividad",
+        "num": "26 / 32",
+        "body": "<p style=\"font-size:17px;line-height:1.7;margin-bottom:12px;\"><strong>Meta:</strong> producir el paquete mínimo del mes.</p><ol style=\"font-size:16px;line-height:2.1;\"><li>Reúne ventas, gastos y una nota de pedido.</li><li>Encarga el reporte en Excel.</li><li>Encarga la cotización en Word y el PDF.</li><li>Encarga el resumen ejecutivo en PDF.</li><li>Aplica la lista de verificación a cada archivo.</li></ol><div class=\"block block-blue\"><div class=\"block-title\">Entregable</div>Tres archivos terminados y una nota con las correcciones que hiciste.</div>"
+    },
+    {
+        "titulo": "Rúbrica",
+        "num": "27 / 32",
+        "body": "<table style=\"font-size:14px;\"><tr><th>Criterio</th><th>Peso</th><th>Qué se observa</th></tr><tr><td>Calidad del encargo</td><td>25%</td><td>Seis elementos completos</td></tr><tr><td>Exactitud</td><td>30%</td><td>Cifras y fórmulas correctas</td></tr><tr><td>Formato</td><td>20%</td><td>Plantilla y presentación</td></tr><tr><td>Revisión</td><td>25%</td><td>Lista aplicada y correcciones</td></tr></table>"
+    },
+    {
+        "titulo": "Resumen",
+        "num": "28 / 32",
+        "body": "<ul style=\"font-size:17px;line-height:2.1;\"><li>Un encargo completo define objetivo, fuentes, formato, criterios, condiciones y entrega.</li><li>El reporte en Excel debe recalcularse, no solo verse bonito.</li><li>La cotización depende de una buena plantilla.</li><li>El resumen ejecutivo se escribe para quien decide.</li><li>La revisión es parte del entregable.</li></ul><div class=\"block center\" style=\"margin-top:15px;\"><div class=\"block-title\">Frase final</div><em>Un buen entregable se explica solo.</em></div>"
+    },
+    {
+        "titulo": "Autoevaluación",
+        "num": "29 / 32",
+        "body": "<ol style=\"font-size:17px;line-height:2.1;\"><li>¿Cuáles son los seis elementos del encargo?</li><li>¿Qué tres cosas revisas en un reporte?</li><li>¿Por qué usar plantilla en la cotización?</li><li>¿Qué debe incluir un resumen ejecutivo?</li><li>¿Qué tareas conviene programar?</li></ol>"
+    },
+    {
+        "titulo": "Glosario",
+        "num": "30 / 32",
+        "body": "<table style=\"font-size:14px;\"><tr><th>Término</th><th>Significado</th></tr><tr><td>Entregable</td><td>Archivo final que se entrega.</td></tr><tr><td>Plantilla</td><td>Documento base con formato y campos.</td></tr><tr><td>Recalcular</td><td>Actualizar totales al cambiar un dato.</td></tr><tr><td>Anonimizar</td><td>Quitar datos que identifican personas.</td></tr><tr><td>Programar</td><td>Ejecutar una tarea de forma automática.</td></tr></table>"
+    },
+    {
+        "titulo": "Recursos y consejos",
+        "num": "31 / 32",
+        "body": "<ul style=\"font-size:16px;line-height:2.1;\"><li>Guarda tus plantillas en 04_Plantillas.</li><li>Conserva el prompt que funcionó.</li><li>Revisa la primera ejecución de cada tarea programada.</li><li>Documenta correcciones para no repetirlas.</li><li>Empieza por el entregable más urgente.</li></ul><div class=\"block block-blue\"><div class=\"block-title\">Siguiente paso</div>En 2.4 aprenderás a supervisar permisos, cuotas y datos antes de usar el resultado con clientes.</div>"
+    },
+    {
+        "titulo": "Gracias por su atención",
+        "num": "32 / 32",
+        "body": "<div class=\"final\">\n            <h2>¿Dudas o comentarios?</h2>\n            <p>Participa en el foro del tema</p>\n            <p style=\"margin-top:30px;color:#3d5a96;font-weight:700;\">ICATHI 4.0 — Agentes de AI para la automatización del trabajo</p>\n        </div>"
+    }
+];
+
+let actual = 0;
+
+function renderSlide(i) {
+    const s = slides[i];
+    const c = document.getElementById('slides-container');
+    if (s.tipo === 'portada') {
+        c.innerHTML = '<div class="slide portada">' +
+            '<div class="portada-bg"></div>' +
+            '<div class="franja1"></div><div class="franja2"></div><div class="franja3"></div><div class="franja4"></div>' +
+            '<div class="portada-content">' +
+            '<div class="campus">CAMPUS VIRTUAL</div>' +
+            '<h1>Agentes de AI<span>para la automatización del trabajo</span></h1>' +
+            '<div class="tema-label">' + PORTADA.etiqueta + '</div>' +
+            '<div class="tema">' + PORTADA.tema + '</div>' +
+            '<div class="instituto">' + PORTADA.instituto + '</div>' +
+            '<div class="fecha">2026</div>' +
+            '</div></div>';
+    } else {
+        c.innerHTML = '<div class="slide">' +
+            '<div class="slide-header"><h2>' + s.titulo + '</h2><span class="num">' + s.num + '</span></div>' +
+            '<div class="slide-body">' + s.body + '</div>' +
+            '<div class="slide-footer"><span>ICATHI 4.0</span><span>' + s.num + '</span></div>' +
+            '</div>';
+    }
+    document.getElementById('counter').textContent = 'Diapositiva ' + (i + 1) + ' de ' + slides.length;
+    document.querySelectorAll('.nav-bar button').forEach((b, idx) => {
+        b.classList.toggle('activo', idx === i);
+    });
+}
+
+function sig() {
+    if (actual < slides.length - 1) { actual++; renderSlide(actual); }
+}
+function ant() {
+    if (actual > 0) { actual--; renderSlide(actual); }
+}
+
+// Nav bar
+document.addEventListener('DOMContentLoaded', () => {
+    const nav = document.createElement('div');
+    nav.className = 'nav-bar';
+    slides.forEach((_, i) => {
+        const b = document.createElement('button');
+        b.textContent = i + 1;
+        b.onclick = () => { actual = i; renderSlide(i); };
+        nav.appendChild(b);
+    });
+    document.body.insertBefore(nav, document.querySelector('.nav-controls'));
+    renderSlide(0);
+});
+</script>
+
+</body>
+</html>
